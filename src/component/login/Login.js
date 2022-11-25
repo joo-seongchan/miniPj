@@ -329,8 +329,6 @@ export const Login = () => {
 
     const { data } = await joinApi.post(`/join`, null, { params: userobj });
 
-    console.log(await joinApi.post(`/join`, null, { params: userobj }));
-
     if (data.code === -1) {
       setError("susernameResult", { message: "이미 가입된 이메일 입니다." });
     } else if (data.code === 1) {

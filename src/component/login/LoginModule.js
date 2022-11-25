@@ -126,7 +126,7 @@ export const LoginModule = () => {
       password: password,
     };
 
-    const { data } = await joinApi.post("/login", null, {
+    const { data } = await joinApi.post("/templogin", null, {
       params: loginDb,
     });
     console.log(

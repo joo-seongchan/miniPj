@@ -10,8 +10,16 @@ import img4 from "../../assets/images/portfolio/img4.jpg";
 import img5 from "../../assets/images/portfolio/img5.jpg";
 import img6 from "../../assets/images/portfolio/img6.jpg";
 import { joinApi } from "../../api";
-import { set } from "react-hook-form";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+const BtnWrap = styled.div`
+  display: flex;
+  justify-content: right;
+  margin: 20px 0;
+`;
+
+const imgDb = [img1, img2, img3, img4, img5, img6];
 
 export const NoticeBoard = () => {
   const [db, setDb] = useState([]);
@@ -39,23 +47,25 @@ export const NoticeBoard = () => {
               </h6>
             </Col>
           </Row>
-          <Link style={{ position: "relative", right: "0" }} to="/">
-            <Button>새 글</Button>
-          </Link>
+          <BtnWrap>
+            <Link to="/contact">
+              <Button style={{ margin: "10px 0 " }}>새 글</Button>
+            </Link>
+          </BtnWrap>
           <Row className="m-t-40">
             {db.map((db) => (
               <Col md="4" key={db.id}>
                 <Card className="card-shadow">
                   <a href="#" className="img-ho">
                     <img
-                      src={img1}
+                      src={imgDb[(db.id % 6) + 1]}
                       className="card-img-top"
                       alt="wrappixel kit"
                     />
                   </a>
                   <CardBody>
-                    <h5 className="font-medium m-b-0"></h5>
-                    <p className="m-b-0 font-14">Digital Marketing</p>
+                    <h5 className="font-medium m-b-0">{db.title}</h5>
+                    <p className="m-b-0 font-14">{db.content}</p>
                   </CardBody>
                 </Card>
               </Col>

@@ -1,49 +1,35 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import {
-  Row,
-  Col,
-  Container,
-  Form,
-  FormGroup,
-  Input,
-  Button,
-} from "reactstrap";
+import { useNavigate } from "react-router-dom";
+import { Row, Col, Container, Form, FormGroup, Button } from "reactstrap";
 import { joinApi } from "../../api";
 
 export const Contact = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors, isValid },
+    formState: { isSubmitting, isValid },
     getValues,
     setError,
     clearErrors,
   } = useForm({ mode: "onChange" });
 
+  const navigate = useNavigate();
+
   const submit = async () => {
-    console.log(1);
-    const { title, text } = getValues();
-    console.log(title);
-    const contents = {
+    const { title, content } = getValues();
+    const contentDb = {
       title: title,
-      text: text,
+      content: content,
     };
-    const { data } = await joinApi.post(`/api/posting`, null, {
-      params: contents,
-    });
-    console.log(
-      await joinApi.post(`/api/posting`, null, {
-        params: contents,
-      })
-    );
-    if (data.code === -1) {
-      setError("susernameResult", { message: "이미 가입된 이메일 입니다." });
-    } else if (data.code === 1) {
-    } else {
-      console.log(data);
-    }
+    const {
+      data: { code },
+    } = await joinApi.post("/api/posting", null, { params: contentDb });
+    if (code === 1) {
+      navigate("/noticeboard");
+    } else console.log(code);
   };
+
   return (
     <div>
       <div className="spacer bg-light">
@@ -72,7 +58,8 @@ export const Contact = () => {
                       <Row>
                         <Col lg="6" style={{ maxWidth: "100%", flex: "100%" }}>
                           <FormGroup className="m-t-15">
-                            <Input
+                            <input
+                              className="form-control"
                               {...register("title", {
                                 required: "Title은 필수 입니다.",
                                 onChange() {
@@ -86,21 +73,25 @@ export const Contact = () => {
                         </Col>
                         <Col lg="12">
                           <FormGroup className="m-t-15">
-                            <Input
-                              {...register("text", {
+                            <input
+                              className="form-control"
+                              {...register("content", {
                                 onChange() {
-                                  clearErrors("text");
+                                  clearErrors("content");
                                 },
                               })}
-                              type="textarea"
-                              name="text"
+                              type="text"
                               placeholder="message"
                             />
                           </FormGroup>
                         </Col>
                         <Col lg="12">
                           <Button
-                            type="submit"
+                            disabled={isSubmitting}
+                            style={{
+                              opacity: `${isValid ? "1" : "0.5"}`,
+                              cursor: `${isValid ? "pointer" : "auto"}`,
+                            }}
                             className="btn btn-danger-gradiant m-t-20 btn-arrow"
                           >
                             <span>

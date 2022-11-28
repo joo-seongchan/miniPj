@@ -28,7 +28,12 @@ export const NoticeBoard = () => {
       const {
         data: { results },
       } = await joinApi.get("/api/board");
-      setDb(results);
+      const reverseDb = results
+        .slice(0)
+        .reverse()
+        .map((num) => num);
+      setDb(reverseDb);
+      console.log(reverseDb);
     };
     boardData();
   }, []);
@@ -56,9 +61,9 @@ export const NoticeBoard = () => {
             {db.map((db) => (
               <Col md="4" key={db.id}>
                 <Card className="card-shadow">
-                  <a href="#" className="img-ho">
+                  <a href="/#/noticeboard" className="img-ho">
                     <img
-                      src={imgDb[(db.id % 6) + 1]}
+                      src={imgDb[(db.id % 5) + 1]}
                       className="card-img-top"
                       alt="wrappixel kit"
                     />
